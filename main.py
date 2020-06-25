@@ -18,11 +18,49 @@ def main():
     sh = window.winfo_screenheight()
     window.geometry("%dx%d+%d+%d"%(pw, ph, (sw-pw)/2, (sh-ph)/2))
     window.resizable(False, False)
+
+    def openFile():
+        global TYPE
+        global TARGET
+        global STATUS_MESSAGE
+
+        try: 
+            TARGET = filedialog.askopenfilename(initialdir = "D:/", title="파일 선택", filetypes=(("XML","*.xml"),("all files","*.*")))
+            if not TARGET: 
+                TYPE = 0
+                TARGET = ""
+                STATUS_MESSAGE.set('파일/폴더를 선택해주세요')
+            else:
+                TYPE = 1
+                STATUS_MESSAGE.set("선택된 파일:%s"%TARGET)
+        except: 
+            # error
+            pass
+        
+        
+    def openDir():
+        global TYPE
+        global TARGET
+        global STATUS_MESSAGE
+
+        try:
+            TARGET = filedialog.askdirectory(initialdir = "D:/", title="폴더 선택")
+            if not TARGET: 
+                    TYPE = 0
+                    TARGET = ""
+                    STATUS_MESSAGE.set('파일/폴더를 선택해주세요')
+            else:
+                TYPE = 2
+                STATUS_MESSAGE.set("선택된 폴더:%s"%TARGET)
+        except: 
+            # error
+            pass
+
         
     # 버튼
-    fileWindow = ttk.Button(window, text="파일 선택", width=20, )
+    fileWindow = ttk.Button(window, text="파일 선택", width=20, command=openFile)
     fileWindow.place(x=50, y=30)
-    dirWindow = ttk.Button(window, text="폴더 선택", width=20, )
+    dirWindow = ttk.Button(window, text="폴더 선택", width=20, command=openDir)
     dirWindow.place(x=220, y=30)
 
     processBtn = ttk.Button(window, text="처리 하기", width=20, )
@@ -33,6 +71,7 @@ def main():
 
     global TYPE
     global STATUS_MESSAGE
+    
     STATUS_MESSAGE = StringVar()
     messageLabel = ttk.Label(window, textvariable=STATUS_MESSAGE)
     messageLabel.place(x=50, y=140)
