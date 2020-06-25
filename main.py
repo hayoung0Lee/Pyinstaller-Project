@@ -1,11 +1,28 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+import threading
+import time
 
 #0: not selected, 1: file process, 2: dir process
 TYPE = 0 
 TARGET=""
 STATUS_MESSAGE=""
+
+def defProcess(t, target):
+    global STATUS_MESSAGE
+    print(t, target)
+    time.sleep(10)
+    STATUS_MESSAGE.set("처리가 종료되었습니다. ")
+
+def initProcess():
+    global TYPE
+    global TARGET
+    global STATUS_MESSAGE
+
+    th = threading.Thread(target=defProcess, args=(TYPE, TARGET))
+    th.start()
+    STATUS_MESSAGE.set("처리를 시작했습니다. ")
 
 def main():
     # gui
@@ -63,7 +80,7 @@ def main():
     dirWindow = ttk.Button(window, text="폴더 선택", width=20, command=openDir)
     dirWindow.place(x=220, y=30)
 
-    processBtn = ttk.Button(window, text="처리 하기", width=20, )
+    processBtn = ttk.Button(window, text="처리 하기", width=20, command=initProcess)
     processBtn.place(x=50, y=80)
 
     processBtn = ttk.Button(window, text="중단 하기", width=20, )
